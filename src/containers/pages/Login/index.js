@@ -1,26 +1,35 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
+import { actionUserName } from '../../../config/redux/action'
 
 class Login extends Component {
-   constructor(props) {
-      super(props);
-      this.state = {  };
+
+   changeUser = () => {
+      this.props.changeUserName()
    }
+  
    render() {
       return (
          <div>
-            <p>Login Page {this.props.popupProps}</p>
-            <button>Go to Register</button>
+            <p>Login Page {this.props.userName}</p>
+            <button onClick={this.changeUser} >Change User Name</button>
             <button>Go to Dashboard</button>
          </div>
       );
    }
 }
 
-const mapStateToProps = (state) => {
-   return {
-      popupProps: state.popup,
-   }
-}
+const mapStateToProps = (state) => ({
+   popupProps: state.popup,
+   userName: state.user,
+})
 
-export default connect(mapStateToProps, null)(Login);
+// dispatch = function untuk merubah value
+const mapStateToDispatch = (dispatch) => ({
+   changeUserName: () => dispatch(actionUserName())
+})
+
+export default connect(
+   mapStateToProps, 
+   mapStateToDispatch
+)(Login);
