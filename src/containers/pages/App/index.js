@@ -6,13 +6,18 @@ import Dashboard from '../Dashboard';
 import Register from '../Register';
 import Login from '../Login';
 
+import { Provider } from 'react-redux';
+import { store } from '../../../config/redux'
+
 function App() {
   return (
+  <Provider store={store}>
    <Router>
       <Route path="/" exact component={Dashboard} />
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
     </Router>
+  </Provider>
   );
 }
 

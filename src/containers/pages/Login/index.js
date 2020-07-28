@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { connect } from 'react-redux';
 
 class Login extends Component {
    constructor(props) {
@@ -8,7 +9,7 @@ class Login extends Component {
    render() {
       return (
          <div>
-            <p>Login Page</p>
+            <p>Login Page {this.props.popupProps}</p>
             <button>Go to Register</button>
             <button>Go to Dashboard</button>
          </div>
@@ -16,4 +17,10 @@ class Login extends Component {
    }
 }
 
-export default Login;
+const mapStateToProps = (state) => {
+   return {
+      popupProps: state.popup,
+   }
+}
+
+export default connect(mapStateToProps, null)(Login);
