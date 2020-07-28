@@ -10,7 +10,7 @@
       border-radius: 10px;
       box-shadow: 3px 3px 10px 0px rgba(0,0,0,0.25);
    }
-   .p-auth-title {
+   p.auth-title {
       margin: 0px;
       font-weight: bold;
       font-size: 24px;
@@ -49,5 +49,12 @@ button.btn {
    &:hover {
       background: #1873bb;
       cursor: pointer;
+   }
+   &.disable {
+      background: gray;
+      border: 1px solid gray;
+      &:hover {
+         cursor: not-allowed;
+      }
    }
 }
