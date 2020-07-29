@@ -21,6 +21,10 @@ class Register extends Component {
       console.log(`data before send: `, email, password);
       // props untuk megakses APi dari firebase
       this.props.registerAPI({email, password})
+      this.setState({
+         email: '',
+         password: ''
+      })
    }
 
    render() {
@@ -32,12 +36,14 @@ class Register extends Component {
                      id="email"
                      type="text" 
                      placeholder="Email.." 
+                     value={this.state.email}
                      onChange={this.handleOnChangeText} 
                />
                <input className="input" 
                      id="password"
                      type="password" 
                      placeholder="Password.." 
+                     value={this.state.password}
                      onChange={this.handleOnChangeText} 
                />
             
