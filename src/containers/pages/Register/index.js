@@ -16,15 +16,17 @@ class Register extends Component {
       })
    }
 
-   handleRegisterSubmit = () => {
+   handleRegisterSubmit = async () => {
       const {email, password} = this.state;
       console.log(`data before send: `, email, password);
       // props untuk megakses APi dari firebase
-      this.props.registerAPI({email, password})
-      this.setState({
-         email: '',
-         password: ''
-      })
+      const res = await this.props.registerAPI({email, password}).catch(err => err)
+      if (res) {
+         this.setState({
+            email: '',
+            password: ''
+         })
+      }
    }
 
    render() {
