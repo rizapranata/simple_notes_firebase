@@ -13,15 +13,22 @@ class Dashboard extends Component {
    handleSaveNotes = () => {
       const {title, content} = this.state;
       const {saveNotes} = this.props;
+      // mengambil data pda local storage yg sudah di set pada halaman login
+      const userData = JSON.parse(localStorage.getItem('userData'))
 
       const data = {
          title: title,
          content: content,
          date: new Date().getTime(),
-         userId: this.props.userData.uid
+         userId: userData.uid
       }
       saveNotes(data);
       console.log(data);
+   }
+
+   componentDidMount(){
+      const userData = localStorage.getItem('userData')
+      console.log('dashboard', JSON.parse(userData));
    }
 
    onInputChange = (e, type) => {
