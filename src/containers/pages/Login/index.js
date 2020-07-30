@@ -24,7 +24,7 @@ class Login extends Component {
       // props untuk megakses APi dari firebase
       const res = await this.props.loginAPI({email, password}).catch(err => err)
       if (res) {
-         console.log("Login success");
+         console.log("Login success", res);
          this.setState({
             email: '',
             password: ''
