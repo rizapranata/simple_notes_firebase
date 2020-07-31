@@ -68,3 +68,25 @@ export const addDataToAPI = (data) => (dispatch) => {
       date: data.date
   });
 }
+
+export const getDataFromAPI = (userId) => (dispatch) => {
+   const urlNotes = database.ref('notes/' + userId);
+   return new Promise((resolve, reject) => {
+      //method on untuk mengupdate data yg berubah secara realtime pada firebase
+      urlNotes.on('value', function(snapshot) {
+         console.log('get data: ',snapshot.val());
+         // Object.keys() untuk parsing data dari object ke array
+         const data = []
+         Object.keys(snapshot.val()).map(key => {
+            data.push({
+               id: key,
+               data: snapshot.val()[key]
+            })
+         });
+
+         dispatch({type: 'SET_NOTES', value: data})
+         resolve(snapshot.val())
+      });
+
+   })
+}
