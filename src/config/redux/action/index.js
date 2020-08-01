@@ -83,10 +83,26 @@ export const getDataFromAPI = (userId) => (dispatch) => {
                data: snapshot.val()[key]
             })
          });
-
          dispatch({type: 'SET_NOTES', value: data})
          resolve(snapshot.val())
       });
+   })
+}
 
+export const updateDataFromAPI = (data) => (dispatch) => {
+   const urlNotes = database.ref(`notes/${data.userId}/${data.noteId}`);
+   return new Promise((resolve, reject) => {
+      // method set untuk mengupdate data dari firebase
+      urlNotes.set({
+          title: data.title,
+          content: data.content,
+          date: data.date
+      }, (err) => {
+         if (err) {
+            reject(false)
+         }else{
+            resolve(true)
+         }
+      });
    })
 }

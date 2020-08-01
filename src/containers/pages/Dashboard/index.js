@@ -1,13 +1,15 @@
 import React, {Component, Fragment} from 'react';
 import { connect } from 'react-redux';
-import { addDataToAPI, getDataFromAPI } from '../../../config/redux/action'
+import { addDataToAPI, getDataFromAPI, updateDataFromAPI } from '../../../config/redux/action'
 import'./Dashboard.scss';
 
 class Dashboard extends Component {
    state = {
       title: '',
       content: '',   
-      date: ''
+      date: '',
+      textButton: 'SIMPAN',
+      noteId: '',
    }
 
    componentDidMount(){
@@ -16,8 +18,8 @@ class Dashboard extends Component {
    }
 
    handleSaveNotes = () => {
-      const {title, content} = this.state;
-      const {saveNotes} = this.props;
+      const {title, content, textButton, noteId} = this.state;
+      const {saveNotes, updateNotes} = this.props;
       // mengambil data pda local storage yg sudah di set pada halaman login
       const userData = JSON.parse(localStorage.getItem('userData'))
 
@@ -25,9 +27,15 @@ class Dashboard extends Component {
          title: title,
          content: content,
          date: new Date().getTime(),
-         userId: userData.uid
+         userId: userData.uid,
       }
-      saveNotes(data);
+
+      if (textButton === 'SIMPAN') {
+         saveNotes(data);
+      }else{
+         data.noteId = noteId;//
+         updateNotes(data);
+      }
       console.log(data);
    }
 
@@ -37,8 +45,25 @@ class Dashboard extends Component {
       })
    }
 
+   updateNotes = (note) => {
+      this.setState({
+         title: note.data.title,
+         content: note.data.content,
+         textButton: 'UPDATE',
+         noteId: note.id
+      })
+   }
+
+   cancleUpdate = () => {
+      this.setState({
+         title: '',
+         content: '',
+         textButton: 'SIMPAN',
+      })
+   }
+
    render() {
-      const {title, content} = this.state;
+      const {title, content, textButton} = this.state;
       const {notes} = this.props;
       console.log('Notes : ', notes);
       return (
@@ -55,23 +80,36 @@ class Dashboard extends Component {
                         onChange={(e)=> this.onInputChange(e, 'content')}
                >
                </textarea>
-
-               <button className="save-btn" 
+               <div className="action-wrapper">
+               {
+                  textButton === 'UPDATE' ? (
+                     <button className="save-btn cancle" 
+                        onClick={this.handleSaveNotes} 
+                        onClick={this.cancleUpdate}>
+                        CENCLE
+                     </button>
+                  ) : <div />
+               }
+                  <button className="save-btn" 
                      onClick={this.handleSaveNotes}>
-                  Simpan
-               </button>
+                     {textButton}
+                  </button>
+               </div>
+
             </div>
-               <hr/>
+            <hr />
                {
                   notes.length > 0 ? (
                      <Fragment>
                         {
                            notes.map(note => {
                               return (
-                                 <div className="card-content" key={note.id}>
-                                    <p className="title">{note.data.title}</p>
+                                 <div className="card-content" key={note.id} 
+                                    onClick={() => this.updateNotes(note)}>
+                                    <p className="title" value={title} >{note.data.title}</p>
                                     <p className="date">{note.data.date}</p>
-                                    <p className="content">{note.data.content}</p>
+                                    <p className="content" value={content} >{note.data.content}</p>
+                                    {/* <div className="delete-btn">x</div> */}
                                  </div>
                               )
                            })
@@ -91,7 +129,8 @@ const reduxState = (state) => ({
 
 const reduxDispatch = (dispatch) => ({
    saveNotes : (data) => dispatch(addDataToAPI(data)),
-   getNotes : (data) => dispatch(getDataFromAPI(data))
+   getNotes : (data) => dispatch(getDataFromAPI(data)),
+   updateNotes: (data) => dispatch(updateDataFromAPI(data))
 })
 
 export default connect(reduxState, reduxDispatch)(Dashboard);

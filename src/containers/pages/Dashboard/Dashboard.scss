@@ -43,6 +43,11 @@
          font-weight: bold;
          text-transform: uppercase;
          outline: none;
+         margin: 10px;
+      }
+      .save-btn.cancle {
+         border: 2px solid salmon;
+         color: salmon;
       }
    }
    .card-content {
