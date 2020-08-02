@@ -106,3 +106,11 @@ export const updateDataFromAPI = (data) => (dispatch) => {
       });
    })
 }
+
+export const deleteDataFromAPI = (data) => (dispatch) => {
+   const urlNotes = database.ref(`notes/${data.userId}/${data.noteId}`);
+   return new Promise((resolve, reject) => {
+      // method set untuk mengupdate data dari firebase
+      urlNotes.remove();
+   })
+}

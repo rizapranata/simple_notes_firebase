@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import { connect } from 'react-redux';
-import { addDataToAPI, getDataFromAPI, updateDataFromAPI } from '../../../config/redux/action'
+import { addDataToAPI, getDataFromAPI, updateDataFromAPI, deleteDataFromAPI} from '../../../config/redux/action'
 import'./Dashboard.scss';
 
 class Dashboard extends Component {
@@ -52,6 +52,18 @@ class Dashboard extends Component {
          textButton: 'UPDATE',
          noteId: note.id
       })
+   }
+
+   deleteNote = (e, note) => {      
+      // agar note tidak ikut ke klick
+      e.stopPropagation()
+      const {deleteNote} = this.props;
+      const userData = JSON.parse(localStorage.getItem('userData'))
+      const data = {
+         userId: userData.uid,
+         noteId: note.id
+      }
+      deleteNote(data);
    }
 
    cancleUpdate = () => {
@@ -109,7 +121,9 @@ class Dashboard extends Component {
                                     <p className="title" value={title} >{note.data.title}</p>
                                     <p className="date">{note.data.date}</p>
                                     <p className="content" value={content} >{note.data.content}</p>
-                                    {/* <div className="delete-btn">x</div> */}
+                                    <div className="delete-btn" 
+                                       onClick={(e) => this.deleteNote(e, note)}
+                                    >x</div>
                                  </div>
                               )
                            })
@@ -130,7 +144,8 @@ const reduxState = (state) => ({
 const reduxDispatch = (dispatch) => ({
    saveNotes : (data) => dispatch(addDataToAPI(data)),
    getNotes : (data) => dispatch(getDataFromAPI(data)),
-   updateNotes: (data) => dispatch(updateDataFromAPI(data))
+   updateNotes: (data) => dispatch(updateDataFromAPI(data)),
+   deleteNote: (data) => dispatch(deleteDataFromAPI(data)),
 })
 
 export default connect(reduxState, reduxDispatch)(Dashboard);
